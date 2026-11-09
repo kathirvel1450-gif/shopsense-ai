@@ -1,0 +1,10 @@
+# Optional exact token counting for external model providers.
+tiktoken>=0.7,<1.0
+
+# Optional semantic/document integrations. SQLite + local hash embeddings work without these.
+langchain-core>=0.3,<2.0
+langchain-text-splitters>=0.3,<2.0
+chromadb>=1.0,<2.0
+
+# Optional notebook environment for the supplied .ipynb files.
+jupyter>=1.0,<2.0
