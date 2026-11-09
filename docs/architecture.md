@@ -35,7 +35,7 @@ flowchart TD
 
 ## Component responsibilities
 
-- **FastAPI (`backend/app/main.py`, `backend/app/api/`)** registers system, data, customer, ticket, and assistant endpoints. CORS is scoped to the two local Vite origins.
+- **FastAPI (`backend/app/main.py`, `backend/app/api/`)** registers system, data, customer, ticket, and assistant endpoints. CORS defaults to the two local Vite origins and can be set to explicit production origins through `CORS_ORIGINS`.
 - **Data engine (`backend/app/data_engine/`)** discovers and profiles CSV schemas, applies configured transformations without editing raw files, creates audit/report artifacts, and prepares cleaned files for the database and downstream modules.
 - **Database (`backend/app/database/`)** defines SQLAlchemy models, SQLite connection setup, repository operations, constraints, and indexes. Table and column mappings depend on the discovered source schema.
 - **Customer intelligence (`backend/app/customer_intelligence/`)** maps available customer/order columns, filters completed orders, calculates RFM, scales model features, evaluates K-Means candidates, names clusters from observed profiles, and assigns transparent inactivity risk rules.

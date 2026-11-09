@@ -1,0 +1,45 @@
+services:
+  - type: web
+    name: shopsense-ai-api
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    autoDeployTrigger: off
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: CORS_ORIGINS
+        fromService:
+          type: web
+          name: shopsense-ai-dashboard
+          envVarKey: RENDER_EXTERNAL_URL
+      - key: RAG_EMBEDDING_PROVIDER
+        value: local-hash
+      - key: RAG_VECTOR_BACKEND
+        value: sqlite
+      - key: RAG_POLICY_DIR
+        value: policies
+      - key: RAG_INDEX_DIR
+        value: outputs/chroma
+      - key: RAG_CONVERSATION_DB
+        value: outputs/assistant/conversations.sqlite3
+
+  - type: web
+    name: shopsense-ai-dashboard
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm ci && npm run build
+    staticPublishPath: dist
+    autoDeployTrigger: off
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_BASE_URL
+        fromService:
+          type: web
+          name: shopsense-ai-api
+          envVarKey: RENDER_EXTERNAL_URL

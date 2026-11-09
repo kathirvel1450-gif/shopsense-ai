@@ -1,0 +1,1 @@
+"""ShopSense AI backend package."""

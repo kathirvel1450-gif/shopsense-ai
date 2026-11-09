@@ -134,6 +134,10 @@ npm run dev
 
 Open the Vite URL shown in the terminal (normally `http://localhost:5173`). The React dashboard contains Overview, Data Quality, Customer Intelligence, Support Intelligence, AI Assistant, and Settings pages. The preserved FreshKart storefront is served at `/marketplace.html`.
 
+## Render deployment
+
+The root [`render.yaml`](render.yaml) defines a Python API web service and a Vite static site. From the repository root, Render installs backend dependencies with `pip install -r requirements.txt` and starts the API with `python -m uvicorn backend.main:app --host 0.0.0.0 --port $PORT`. `backend/main.py` keeps its `app.*` imports resolvable from the repository root and from `backend/` for local Windows development. The frontend build command is `npm ci && npm run build` from `frontend/`, with `dist` as the publish directory. It reads `VITE_API_BASE_URL` at build time; the backend accepts exact comma-separated origins from `CORS_ORIGINS`. Follow [Render deployment instructions](docs/render_deployment.md) for service wiring. No credentials are stored in the Blueprint.
+
 ## API overview
 
 | Area | Routes |
@@ -177,7 +181,7 @@ No screenshots are included because no genuine capture was produced for this sub
 - The default ticket model is deterministic mock mode. Local hash-vector retrieval is lexical, not semantic.
 - Chroma, LangChain splitting, token-aware counting, and remote embeddings are optional and require explicit installation/configuration.
 - Refund is a review simulation without live order/payment integration; sensitive issues require human handling.
-- HTTP-level integration and live browser interaction were not verified in the previous QA run due to environment stalls/timeouts. See testing summary.
+- Automated system integration tests call route handlers directly; they do not cover deployed HTTP transport. The local dashboard and API connection were verified, but a Render deployment has not been verified.
 - Authentication, authorization, production deployment, and real retailer policy validation are outside this academic foundation.
 
 ## Future enhancements
@@ -186,6 +190,6 @@ Connect the authorized trainer dataset; establish data quality acceptance rules;
 
 ## Academic submission
 
-This repository demonstrates four related academic modules. Start with [project overview](docs/project_overview.md), review [methodology](docs/methodology.md), and use the [academic requirement mapping](docs/academic_evaluation_mapping.md) to locate implementation and test evidence. A timed talk track is in [presentation demo](docs/presentation_demo.md); beginner-friendly viva preparation is in [viva preparation](docs/viva_preparation.md). The current Git history is empty and the worktree contains uncommitted files. See the branch plan in the evaluation mapping; no remote was configured and nothing has been pushed.
+This repository demonstrates four related academic modules. Start with [project overview](docs/project_overview.md), review [methodology](docs/methodology.md), and use the [academic requirement mapping](docs/academic_evaluation_mapping.md) to locate implementation and test evidence. A timed talk track is in [presentation demo](docs/presentation_demo.md); beginner-friendly viva preparation is in [viva preparation](docs/viva_preparation.md). GitHub publication and Render deployment are separate owner-controlled steps; this project preparation does not push or deploy changes.
 
 Use the [final submission checklist](docs/final_submission_checklist.md) to review verified tests, missing trainer data, and screenshot status before handing the project in.
